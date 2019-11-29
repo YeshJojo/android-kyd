@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,6 +21,7 @@ public class ForgotPassword extends AppCompatActivity {
     Button sendCode, homeRedirect;
     FirebaseAuth auth;
     LinearLayout first, second, load;
+    TextView loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +32,8 @@ public class ForgotPassword extends AppCompatActivity {
         first = findViewById(R.id.firstStep);
         second = findViewById(R.id.secondStep);
         load = findViewById(R.id.loadinglayout);
+        loading = findViewById(R.id.loading);
         auth = FirebaseAuth.getInstance();
-        email.setText(auth.getCurrentUser().getEmail());
         sendCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +62,7 @@ public class ForgotPassword extends AppCompatActivity {
                     second.setVisibility(View.VISIBLE);
                     sendCode.setVisibility(View.VISIBLE);
                     load.setVisibility(View.GONE);
+                    loading.setVisibility(View.GONE);
                 }
             }
         });

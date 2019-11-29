@@ -36,10 +36,10 @@
                 <org.eazegraph.lib.charts.BarChart
                     android:id="@+id/barchart"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="256dp"
                     android:padding="10dp"
                     app:egFixedBarWidth="true"
-                    app:egBarWidth="10dp"
+                    app:egBarWidth="20dp"
                     app:egLegendHeight="40dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -56,9 +56,9 @@
             android:id="@+id/detailview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/btn_gradient"
             android:text="Check detail view"
             android:textAllCaps="false"
-            android:background="@drawable/btn_gradient"
             android:textColor="@android:color/white" />
     </LinearLayout>
     <LinearLayout

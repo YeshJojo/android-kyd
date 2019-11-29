@@ -28,7 +28,6 @@ public class MiStepCounter extends AppCompatActivity {
                 @Override
                 public void onSuccess(Object data) {
                     Log.d(TAG, "Connected with Mi Band!");
-
                     BatteryInfo();
                 }
 

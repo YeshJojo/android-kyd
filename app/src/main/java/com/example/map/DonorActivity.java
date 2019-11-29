@@ -230,13 +230,12 @@ public class DonorActivity extends AppCompatActivity {
             profileMap.put("mail", firebaseAuth.getCurrentUser().getEmail());
             profileMap.put("donor", 1);
 
-            Log.d("Lat",String.valueOf(latitude));
-            Log.d("Long",String.valueOf(longitude));
             mDatabaseRef.child("Users").child(currentUserID).updateChildren(profileMap)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+                                addFitData();
                                 Toast.makeText(DonorActivity.this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                                 startActivity(new Intent(DonorActivity.this, PhoneActivity.class));
@@ -248,6 +247,32 @@ public class DonorActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    void addFitData(){
+        String[] day = {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
+        currentUserID = firebaseAuth.getCurrentUser().getUid();
+        HashMap<String, Object> profileMap = new HashMap<>();
+        profileMap.put("steps","0");
+        profileMap.put("bpm","0");
+        profileMap.put("cal","0");
+        profileMap.put("distance","0");
+        for(int i=0;i<day.length;i++){
+            mDatabaseRef.child("Users").child(currentUserID).child("fitData").child(day[i]).updateChildren(profileMap)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d("fitData","updated");
+                            }
+                            else {
+                                String message = task.getException().toString();
+                                Log.d("fitData",message);
+                            }
+                        }
+                    });
+        }
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

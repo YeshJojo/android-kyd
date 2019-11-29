@@ -1,0 +1,137 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/all_card_bg"
+        android:elevation="8dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="8dp"
+        android:outlineProvider="none"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <com.ramijemli.percentagechartview.PercentageChartView
+                    android:id="@+id/chart"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="40dp"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:pcv_backgroundBarThickness="20dp"
+                    app:pcv_mode="ring"
+                    app:pcv_progressColor="@color/colorPrimaryDarkBlue"
+                    app:pcv_backgroundBarColor="@android:color/white"
+                    app:pcv_progress="0"
+                    app:pcv_progressBarThickness="20dp"
+                    app:pcv_startAngle="90"
+                    app:pcv_textColor="@color/gradient_end_color"
+                    app:pcv_textSize="50sp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/day_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:layout_gravity="center"
+                android:text="Day"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="44sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:layout_gravity="center"
+                    android:text=" %"
+                    android:textColor="@color/white"
+                    android:textSize="44sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="20dp"
+                android:orientation="vertical">
+                <RelativeLayout style="@style/profileDetailsLayout">
+                    <ImageView
+                        android:id="@+id/stepsCount"
+                        android:src="@drawable/hiking"
+                        style="@style/profileDetailsImage" />
+                    <TextView
+                        android:id="@+id/stepCountText"
+                        android:text="Steps"
+                        android:layout_marginTop="10dp"
+                        android:layout_toEndOf="@id/stepsCount"
+                        style="@style/profileDetailsTextMain" />
+                    <TextView
+                        android:id="@+id/text_name1"
+                        android:layout_toEndOf="@id/stepsCount"
+                        style="@style/profileDetailsMiniText" />
+                </RelativeLayout>
+                <RelativeLayout style="@style/profileDetailsLayout">
+                    <ImageView
+                        android:id="@+id/distanceCount"
+                        android:src="@drawable/distance"
+                        style="@style/profileDetailsImage" />
+                    <TextView
+                        android:id="@+id/distanceCountText"
+                        android:text="Distance"
+                        android:layout_marginTop="10dp"
+                        android:layout_toEndOf="@id/distanceCount"
+                        style="@style/profileDetailsTextMain" />
+                </RelativeLayout>
+                <RelativeLayout style="@style/profileDetailsLayout">
+                    <ImageView
+                        android:id="@+id/calCount"
+                        android:src="@drawable/calories"
+                        style="@style/profileDetailsImage" />
+                    <TextView
+                        android:id="@+id/calCountText"
+                        android:text="Steps"
+                        android:layout_marginTop="10dp"
+                        android:layout_toEndOf="@id/calCount"
+                        style="@style/profileDetailsTextMain" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.ramijemli.percentagechartview.PercentageChartView;
 
 import org.eazegraph.lib.charts.BarChart;
 import org.eazegraph.lib.models.BarModel;
@@ -44,9 +47,9 @@ public class GfitStepCounter extends AppCompatActivity {
     String currentUserID;
     String day, totalSteps, totalDistance, totalCal, totalBpm;
     String monData,tueData,wedData,thuData,friData,satData,sunData;
-    int monD,tueD,wedD,thuD,friD,satD,sunD;
     BarChart mBarChart;
-
+    Button detail;
+    FitnessOptions fitnessOptions;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,13 +58,32 @@ public class GfitStepCounter extends AppCompatActivity {
         distance = findViewById(R.id.totalStepTrack);
         calories = findViewById(R.id.stepCal);
         bpmTv = findViewById(R.id.totalBpm);
+        detail = findViewById(R.id.detailview);
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
+        mBarChart = findViewById(R.id.barchart);
 
         mHandler = new Handler();
         startRepeatingTask();
 
-        FitnessOptions fitnessOptions =
+        detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(GfitStepCounter.this, DetailView.class));
+            }
+        });
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                readData();
+            }
+        });
+        RetrieveUserInfo();
+    }
+
+    private void permissionsRead(){
+        fitnessOptions =
                 FitnessOptions.builder()
                         .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE)
                         .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
@@ -80,15 +102,12 @@ public class GfitStepCounter extends AppCompatActivity {
         } else {
             subscribe();
         }
-        mBarChart = findViewById(R.id.barchart);
-        mBarChart.startAnimation();
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                readData();
-            }
-        });
-        RetrieveUserInfo();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        permissionsRead();
     }
 
     @Override
@@ -115,7 +134,7 @@ public class GfitStepCounter extends AppCompatActivity {
                         });
     }
 
-    private void readData() {
+    public void readData() {
         try{
             Fitness.getHistoryClient(this, GoogleSignIn.getLastSignedInAccount(this))
                     .readDailyTotal(DataType.TYPE_STEP_COUNT_DELTA)
@@ -128,6 +147,7 @@ public class GfitStepCounter extends AppCompatActivity {
                                                     ? 0
                                                     : dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
                                     step.setText(String.valueOf(total));
+                                    Log.d("stepsTracked",String.valueOf(total));
                                     totalSteps = String.valueOf(total);
                                 }
                             })
@@ -204,8 +224,6 @@ public class GfitStepCounter extends AppCompatActivity {
                                     Log.w(TAG, "There was a problem getting the step count.", e);
                                 }
                             });
-
-
             Calendar calendar = Calendar.getInstance();
             day = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US).toLowerCase();
 
@@ -252,35 +270,36 @@ public class GfitStepCounter extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         try {
-                            if (dataSnapshot.hasChild("monday"))
+                            if(dataSnapshot.hasChild("monday"))
                                 monData = dataSnapshot.child("monday").child("steps").getValue().toString();
-                            if (dataSnapshot.hasChild("tuesday"))
+                            if(dataSnapshot.hasChild("tuesday"))
                                 tueData = dataSnapshot.child("tuesday").child("steps").getValue().toString();
-                            if (dataSnapshot.hasChild("wednesday"))
+                            if(dataSnapshot.hasChild("wednesday"))
                                 wedData = dataSnapshot.child("wednesday").child("steps").getValue().toString();
-                            if (dataSnapshot.hasChild("friday"))
+                            if(dataSnapshot.hasChild("friday"))
                                 friData = dataSnapshot.child("friday").child("steps").getValue().toString();
-                            if (dataSnapshot.hasChild("saturday"))
+                            if(dataSnapshot.hasChild("saturday"))
                                 satData = dataSnapshot.child("saturday").child("steps").getValue().toString();
-                            if (dataSnapshot.hasChild("sunday"))
+                            if(dataSnapshot.hasChild("sunday"))
                                 sunData = dataSnapshot.child("sunday").child("steps").getValue().toString();
-                            if (dataSnapshot.hasChild("thursday"))
+                            if(dataSnapshot.hasChild("thursday"))
                                 thuData = dataSnapshot.child("thursday").child("steps").getValue().toString();
 
                             if(!monData.isEmpty())
-                                mBarChart.addBar(new BarModel("Mon",Integer.parseInt(monData),  0xFF18a3fe,0xFF18a3fe));
+                                mBarChart.addBar(new BarModel("Mon",Integer.parseInt(monData),  0xFF18a3fe));
                             if(!tueData.isEmpty())
                                 mBarChart.addBar(new BarModel("Tue",Integer.parseInt(tueData), 0xFF18a3fe));
                             if(!wedData.isEmpty())
                                 mBarChart.addBar(new BarModel("Wed",Integer.parseInt(wedData), 0xFF18a3fe));
-                            if(!thuData.isEmpty())
-                                mBarChart.addBar(new BarModel("Thu",Integer.parseInt(thuData), 0xFF18a3fe));
                             if(!friData.isEmpty())
                                 mBarChart.addBar(new BarModel("Fri",Integer.parseInt(friData),  0xFF18a3fe));
                             if(!satData.isEmpty())
                                 mBarChart.addBar(new BarModel("Sat",Integer.parseInt(satData),  0xFF18a3fe));
                             if(!sunData.isEmpty())
                                 mBarChart.addBar(new BarModel("Sun",Integer.parseInt(sunData),  0xFF18a3fe));
+                            if(!thuData.isEmpty())
+                                mBarChart.addBar(new BarModel("Thu",Integer.parseInt(thuData), 0xFF18a3fe));
+                            mBarChart.startAnimation();
                         } catch (NullPointerException e) {
                             Log.d("null", e.getMessage());
                         }
